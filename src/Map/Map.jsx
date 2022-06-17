@@ -10,6 +10,8 @@ import {
   InfoWindow,
 } from "react-google-maps";
 
+import locations from "../data/locations.json";
+
 class PlaceMarker extends Marker {
   render() {
     return (
@@ -46,14 +48,17 @@ function GMap() {
   }, []);
 
   return (
-    // Important! Always set the container height explicitly
     userLat &&
     userLng && (
       <GoogleMap
         ref={mapRef}
         defaultZoom={10}
         defaultCenter={{ lat: userLat, lng: userLng }}
-      ></GoogleMap>
+      >
+        {locations.map((location) => (
+          <Marker key={location.id} position={location.location} />
+        ))}
+      </GoogleMap>
     )
   );
 }
@@ -61,6 +66,7 @@ function GMap() {
 const MapWrapped = withScriptjs(withGoogleMap(GMap));
 
 export default function Map() {
+  console.log(locations);
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
       <MapWrapped
